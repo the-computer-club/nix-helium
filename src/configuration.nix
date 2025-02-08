@@ -16,7 +16,15 @@ in
     firewall.allowedTCPPorts = [ 22 ];
   };
 
-  environment.systemPackages = with pkgs; [ git ];
+
+  programs.git = {
+    enable = true;
+    config = {
+      safe = {
+        directory = "/etc/nixos";
+      };
+    };
+  };
 
   services = {
     openssh = {
