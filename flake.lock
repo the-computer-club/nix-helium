@@ -1,0 +1,111 @@
+{
+  "nodes": {
+    "asluni": {
+      "locked": {
+        "lastModified": 1738874492,
+        "narHash": "sha256-5LV3VYeJp2jRu4WgIJ8O8GnbC2hwk1MhsqzeeGnLmrA=",
+        "owner": "the-computer-club",
+        "repo": "automous-zones",
+        "rev": "5aae382e8b165c50d595355d3d79933109e82aaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-computer-club",
+        "repo": "automous-zones",
+        "type": "github"
+      }
+    },
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738765162,
+        "narHash": "sha256-3Z40qHaFScWUCVQrGc4Y+RdoPsh1R/wIh+AN4cTXP0I=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "ff3568858c54bd306e9e1f2886f0f781df307dff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1738453229,
+        "narHash": "sha256-7H9XgNiGLKN1G1CgRh0vUL4AheZSYzPm+zmZ7vxbJdo=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "32ea77a06711b758da0ad9bd6a844c5740a87abd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "lynx": {
+      "locked": {
+        "lastModified": 1722535064,
+        "narHash": "sha256-T9DRY+t2gVLuIn6oOvoSeJ831SPBNOdvNkjl2CK2VyM=",
+        "owner": "the-computer-club",
+        "repo": "lynx",
+        "rev": "ad66210b43c14e457e25e40f9228f23988cdd517",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-computer-club",
+        "repo": "lynx",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1738843498,
+        "narHash": "sha256-7x+Q4xgFj9UxZZO9aUDCR8h4vyYut4zPUvfj3i+jBHE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f5a32fa27df91dfc4b762671a0e0a859a8a0058f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-lib": {
+      "locked": {
+        "lastModified": 1738452942,
+        "narHash": "sha256-vJzFZGaCpnmo7I6i416HaBLpC+hvcURh/BQwROcGIp8=",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
+      }
+    },
+    "root": {
+      "inputs": {
+        "asluni": "asluni",
+        "disko": "disko",
+        "flake-parts": "flake-parts",
+        "lynx": "lynx",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
