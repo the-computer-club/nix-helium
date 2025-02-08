@@ -8,9 +8,15 @@ let
   cfg = config.helion;
 in
 {
+  imports = [ ./users ];
   options.helion.users = mkOption {
     type = with types; attrsOf (submodule {
       options = {
+        packages = mkOption {
+          type = listOf package;
+          default = [];
+        };
+
         extraGroups = mkOption {
           type = listOf str;
           default = [];
@@ -20,6 +26,11 @@ in
         sshKeys = mkOption {
           type = listOf str;
         };
+
+        shell = mkOption {
+          type = nullOr package;
+          default = null;
+        };
       };
     });
   };
@@ -28,5 +39,7 @@ in
     isNormalUser = true;
     extraGroups = lib.mkDefault [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = ucfg.sshKeys;
+    packages = ucfg.packages;
+    shell = lib.mkIf (ucfg.shell != null) ucfg.shell;
   }) cfg.users;
 }

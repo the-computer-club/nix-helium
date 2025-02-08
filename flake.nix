@@ -10,6 +10,9 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Sketti config, for user packages
+    terra.url = "github:skettisouls/nixos";
   };
 
   outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
