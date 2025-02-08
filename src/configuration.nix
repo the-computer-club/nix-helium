@@ -16,6 +16,8 @@ in
     firewall.allowedTCPPorts = [ 22 ];
   };
 
+  environment.systemPackages = with pkgs; [ git ];
+
   services = {
     openssh = {
       enable = true;
