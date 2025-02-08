@@ -2,7 +2,7 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    lynx.url = "github:the-computer-club/lynx";
+    lynx.url = "github:the-computer-club/lynx/flake-guard-v2";
     asluni.url = "github:the-computer-club/automous-zones";
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
 
@@ -27,7 +27,6 @@
         {
           imports = with inputs; [
             lynx.flakeModules.builtins
-            lynx.flakeModules.flake-guard
             asluni.flakeModules.asluni
             git-hooks-nix.flakeModule
           ];
@@ -58,6 +57,7 @@
                 specialArgs = { inherit inputs self; };
                 modules = src ++ [
                   inputs.disko.nixosModules.disko
+                  inputs.lynx.nixosModules.flake-guard-host
                 ];
               };
             };

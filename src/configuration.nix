@@ -16,7 +16,6 @@ in
     firewall.allowedTCPPorts = [ 22 ];
   };
 
-
   programs.git = {
     enable = true;
     config = {
