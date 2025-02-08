@@ -15,7 +15,9 @@
   flake-parts.lib.mkFlake { inherit inputs; }
   ({ ... }: let
     inherit (nixpkgs) lib;
-    src = with builtins; map (file: ./src/${file}) (attrNames (readDir ./src));
+    fileAttrs = lib.filterAttrs (_: t: t == "regular" ) (builtins.readDir ./src);
+    fileList = with builtins; filter (lib.hasSuffix "nix") (attrNames fileAttrs);
+    src = map (file: ./src/${file}) fileList;
   in {
     imports = with inputs; [
       lynx.flakeModules.builtins
