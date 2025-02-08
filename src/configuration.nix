@@ -23,7 +23,7 @@ in
       enable = true;
       openFirewall = false;
       settings =  {
-        passwordAuthentication = false;
+        PasswordAuthentication = false;
       };
     };
   };
