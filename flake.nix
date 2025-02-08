@@ -34,7 +34,14 @@
 
           config = {
             systems = [ "x86_64-linux" ];
-
+            flake = {
+              nixosConfigurations.helium = lib.nixosSystem {
+                specialArgs = { inherit inputs self; };
+                modules = src ++ [
+                  inputs.disko.nixosModules.disko
+                ];
+              };
+            };
             perSystem = { config, pkgs, ... }: {
               pre-commit.check.enable = true;
 
@@ -49,16 +56,6 @@
                 ];
                 packages = with pkgs; [
                   pre-commit
-                ];
-              };
-            };
-
-            flake = {
-              nixosConfigurations.helium = lib.nixosSystem {
-                specialArgs = { inherit inputs self; };
-                modules = src ++ [
-                  inputs.disko.nixosModules.disko
-                  (import ./src/users)
                 ];
               };
             };
