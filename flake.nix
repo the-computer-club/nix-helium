@@ -5,7 +5,7 @@
     lynx.url = "github:the-computer-club/lynx/flake-guard-v2";
     asluni.url = "github:the-computer-club/automous-zones";
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
-
+    sops.url = "github:Mic92/sops-nix";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +17,7 @@
 
   outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; }
-      ({ ... }:
+      ({ config, ... }:
         let
           inherit (nixpkgs) lib;
           fileAttrs = lib.filterAttrs (_: t: t == "regular") (builtins.readDir ./src);
@@ -26,9 +26,8 @@
         in
         {
           imports = with inputs; [
-            lynx.flakeModules.builtins
-            asluni.flakeModules.asluni
             git-hooks-nix.flakeModule
+            lynx.flakeModules.flake-guard
           ];
 
           config = {
@@ -45,8 +44,18 @@
               devShells.default = pkgs.mkShell {
                 shellHook = lib.concatStringsSep "\n" [
                   config.pre-commit.installationScript
+                  ''
+                    sops-recrypt() {
+                      sops decrypt $1 | sops encrypt --filename-override $1 /dev/null
+                    }
+                  ''
                 ];
                 packages = with pkgs; [
+                  sops
+                  direnv
+                  git-extras
+                  git-bug
+                  git
                   pre-commit
                 ];
               };
@@ -54,11 +63,15 @@
 
             flake = {
               nixosConfigurations.helium = lib.nixosSystem {
-                specialArgs = { inherit inputs self; };
-                modules = src ++ [
-                  inputs.disko.nixosModules.disko
-                  inputs.lynx.nixosModules.flake-guard-host
-                ];
+                specialArgs = { inherit inputs; };
+                modules = with inputs; [
+                  disko.nixosModules.disko
+                  lynx.nixosModules.flake-guard-host
+                  asluni.nixosModules.asluni
+                  sops.nixosModules.sops
+                  # { environment.etc.nixos.source = self; }
+                  { environment.etc.nixpkgs.source = nixpkgs; }
+                ] ++ src;
               };
             };
           };
