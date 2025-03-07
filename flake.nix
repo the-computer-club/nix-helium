@@ -46,7 +46,7 @@
                   config.pre-commit.installationScript
                   ''
                     sops-recrypt() {
-                      sops decrypt $1 | sops encrypt --filename-override $1 /dev/null
+                      sops decrypt $1 | sops encrypt --filename-override $1 /dev/stdin
                     }
                   ''
                 ];
