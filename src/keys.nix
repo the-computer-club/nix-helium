@@ -42,6 +42,7 @@ in
 
   config.users.users = mapAttrs
     (name: bool: {
+      isNormalUser = true;
       openssh.authorizedKeys.keys =
         lib.optionals bool
           (maybeKey "ssh-ed25519" name)
