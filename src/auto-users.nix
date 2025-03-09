@@ -14,12 +14,12 @@ in
       options = {
         packages = mkOption {
           type = listOf package;
-          default = [];
+          default = [ ];
         };
 
         extraGroups = mkOption {
           type = listOf str;
-          default = [];
+          default = [ ];
         };
 
         # Required to access the machine
@@ -35,11 +35,13 @@ in
     });
   };
 
-  config.users.users = lib.mapAttrs (user: ucfg: {
-    isNormalUser = true;
-    extraGroups = lib.mkDefault [ "networkmanager" "wheel" ];
-    openssh.authorizedKeys.keys = ucfg.sshKeys;
-    packages = ucfg.packages;
-    shell = lib.mkIf (ucfg.shell != null) ucfg.shell;
-  }) cfg.users;
+  config.users.users = lib.mapAttrs
+    (user: ucfg: {
+      isNormalUser = true;
+      extraGroups = lib.mkDefault [ "networkmanager" "wheel" ];
+      openssh.authorizedKeys.keys = ucfg.sshKeys;
+      packages = ucfg.packages;
+      shell = lib.mkIf (ucfg.shell != null) ucfg.shell;
+    })
+    cfg.users;
 }

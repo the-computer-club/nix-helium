@@ -30,7 +30,7 @@ in
     openssh = {
       enable = true;
       openFirewall = false;
-      settings =  {
+      settings = {
         PasswordAuthentication = false;
       };
     };
