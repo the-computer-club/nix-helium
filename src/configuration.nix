@@ -53,4 +53,13 @@ in
 
   time.timeZone = "America/Chicago";
   system.stateVersion = "24.11";
+
+
+  virtualisation.vmVariant.virtualisation.sharedDirectories = {
+    secrets = {
+      source = "/etc/ssh";
+      target = "/etc/ssh";
+      securityModel = "passthrough";
+    };
+  };
 }
