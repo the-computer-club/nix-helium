@@ -50,6 +50,8 @@
                   ''
                     machine.start()
                     machine.wait_for_unit("default.target")
+                    machine.success("id -nG lunarix | grep -qw 'wheel'")
+                    machine.success("id -nG skettisouls | grep -qw 'wheel'")
                   '';
               };
             };
