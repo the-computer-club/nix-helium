@@ -40,6 +40,7 @@
               pre-commit.settings.hooks = {
                 trim-trailing-whitespace.enable = true;
                 nixpkgs-fmt.enable = true;
+                flake-checker.enable = true;
               };
 
               devShells.default = pkgs.mkShell {
