@@ -1,12 +1,15 @@
-{ inputs, pkgs, lib, ... }:
-let
-  # Add your keys here. Name is arbitrary, but I recommend the associated host.
-  keys = {
-    argon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU3q+/0jJLkAtvCk3hJ+QAXCvza7SZ9a0V6FZq6IJne";
-    flagship = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcon6Pn5nLNXEuLH22ooNR97ve290d2tMNjpM8cTm2r";
-  };
-in
+{ inputs, config, pkgs, lib, ... }:
 {
+  keys.ssh-ed25519 = {
+    argon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU3q+/0jJLkAtvCk3hJ+QAXCvza7SZ9a0V6FZq6IJne";
+    lunarix = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcon6Pn5nLNXEuLH22ooNR97ve290d2tMNjpM8cTm2r";
+  };
+
+  remote.access = {
+    argon = true;
+    lunarix = true;
+  };
+
   # MBR
   boot.loader.grub = {
     efiSupport = true;
@@ -26,13 +29,6 @@ in
       openFirewall = false;
       passwordAuthentication = false;
     };
-  };
-
-  # See ./auto-users.nix for `helion.users`
-  users.users.root.openssh.authorizedKeys.keys = with keys; [ argon flagship ];
-  helion.users = {
-    skettisouls.sshKeys = with keys; [ argon ];
-    lunarix.sshKeys = with keys; [ flagship ];
   };
 
   nixpkgs.config.allowUnfree = true;
