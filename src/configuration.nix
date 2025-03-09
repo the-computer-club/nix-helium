@@ -1,13 +1,16 @@
-{ inputs, config, pkgs, lib, ... }:
-{
-  keys.ssh-ed25519 = {
-    skettisouls = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU3q+/0jJLkAtvCk3hJ+QAXCvza7SZ9a0V6FZq6IJne";
-    lunarix = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcon6Pn5nLNXEuLH22ooNR97ve290d2tMNjpM8cTm2r";
-  };
+{ inputs, pkgs, lib, ... }:
 
-  remote.access = {
-    skettisouls = true;
-    lunarix = true;
+{
+  helion = {
+    keys.ssh-ed25519 = {
+      skettisouls = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU3q+/0jJLkAtvCk3hJ+QAXCvza7SZ9a0V6FZq6IJne";
+      lunarix = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcon6Pn5nLNXEuLH22ooNR97ve290d2tMNjpM8cTm2r";
+    };
+
+    remote.access = {
+      skettisouls = true;
+      lunarix = true;
+    };
   };
 
   # MBR
@@ -57,7 +60,6 @@
 
   time.timeZone = "America/Chicago";
   system.stateVersion = "24.11";
-
 
   virtualisation.vmVariant.virtualisation.sharedDirectories = {
     secrets = {
