@@ -29,7 +29,7 @@ in
     openssh = {
       enable = true;
       openFirewall = false;
-      settings =  {
+      settings = {
         PasswordAuthentication = false;
       };
     };
@@ -48,6 +48,16 @@ in
     extraOptions = ''
       trusted-users = root skettisouls lunarix
     '';
+  };
+
+  # nixos-rebuild build-vm should include host /etc/ssh
+  # (useful for secrets + debugging)
+  virtualisation.vmVariant.virtualisation.sharedDirectories = {
+    secrets = {
+      source = "/etc/ssh";
+      target = "/etc/ssh";
+      securityModel = "passthrough";
+    };
   };
 
   time.timeZone = "America/Chicago";
