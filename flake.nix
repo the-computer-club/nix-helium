@@ -12,29 +12,47 @@
   };
 
   outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
-  flake-parts.lib.mkFlake { inherit inputs; }
-  ({ ... }: let
-    inherit (nixpkgs) lib;
-    fileAttrs = lib.filterAttrs (_: t: t == "regular" ) (builtins.readDir ./src);
-    fileList = with builtins; filter (lib.hasSuffix "nix") (attrNames fileAttrs);
-    src = map (file: ./src/${file}) fileList;
-  in {
-    imports = with inputs; [
-      lynx.flakeModules.builtins
-      lynx.flakeModules.flake-guard
-      asluni.flakeModules.asluni
-    ];
-
-    config = {
-      systems = [ "x86_64-linux" ];
-      flake = {
-        nixosConfigurations.helium = lib.nixosSystem {
-          specialArgs = { inherit inputs self; };
-          modules = src ++ [
-            inputs.disko.nixosModules.disko
+    flake-parts.lib.mkFlake { inherit inputs; }
+      ({ config, ... }:
+        let
+          inherit (nixpkgs) lib;
+          fileAttrs = lib.filterAttrs (_: t: t == "regular") (builtins.readDir ./src);
+          fileList = with builtins; filter (lib.hasSuffix "nix") (attrNames fileAttrs);
+          src = map (file: ./src/${file}) fileList;
+        in
+        {
+          imports = with inputs; [
+            lynx.flakeModules.builtins
+            lynx.flakeModules.flake-guard
+            asluni.flakeModules.asluni
           ];
-        };
-      };
-    };
-  });
+
+          config = {
+            systems = [ "x86_64-linux" ];
+            flake = {
+              modules.nixos = src ++ [
+                inputs.disko.nixosModules.disko
+              ];
+
+              nixosConfigurations.helium = lib.nixosSystem {
+                specialArgs = { inherit inputs self; };
+                modules = config.modules.nixos;
+              };
+            };
+
+            perSystem = { pkgs, ... }: {
+              checks.helium = pkgs.testers.runNixOSTest {
+                name = "helium";
+                node.pkgsReadOnly = false;
+                node.specialArgs = { inherit inputs self; };
+                nodes.machine.imports = config.modules.nixos;
+                testScript =
+                  ''
+                    machine.start()
+                    machine.wait_for_unit("default.target")
+                  '';
+              };
+            };
+          };
+        });
 }
