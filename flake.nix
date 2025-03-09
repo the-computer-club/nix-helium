@@ -58,6 +58,7 @@
                 specialArgs = { inherit inputs self; };
                 modules = src ++ [
                   inputs.disko.nixosModules.disko
+                  (import ./src/users)
                 ];
               };
             };
