@@ -20,6 +20,7 @@
       ({ config, ... }:
         let
           inherit (nixpkgs) lib;
+          rootConfig = config;
           fileAttrs = lib.filterAttrs (_: t: t == "regular") (builtins.readDir ./src);
           fileList = with builtins; filter (lib.hasSuffix "nix") (attrNames fileAttrs);
           src = map (file: ./src/${file}) fileList;
@@ -28,21 +29,24 @@
           imports = with inputs; [
             git-hooks-nix.flakeModule
             lynx.flakeModules.flake-guard
+            ./check-users.nix
           ];
 
           config = {
             systems = [ "x86_64-linux" ];
             flake = {
+              modules.nixos = with inputs; [
+                disko.nixosModules.disko
+                lynx.nixosModules.flake-guard-host
+                asluni.nixosModules.asluni
+                sops.nixosModules.sops
+                # { environment.etc.nixos.source = self; }
+                { environment.etc.nixpkgs.source = nixpkgs; }
+              ] ++ src;
+
               nixosConfigurations.helium = lib.nixosSystem {
-                specialArgs = { inherit inputs; };
-                modules = with inputs; [
-                  disko.nixosModules.disko
-                  lynx.nixosModules.flake-guard-host
-                  asluni.nixosModules.asluni
-                  sops.nixosModules.sops
-                  # { environment.etc.nixos.source = self; }
-                  { environment.etc.nixpkgs.source = nixpkgs; }
-                ] ++ src;
+                specialArgs = { inherit inputs self; };
+                modules = config.flake.modules.nixos;
               };
             };
             perSystem = { config, pkgs, ... }: {
@@ -65,12 +69,36 @@
                 ];
                 packages = with pkgs; [
                   sops
-                  direnv
                   git-extras
                   git-bug
                   git
                   pre-commit
                 ];
+              };
+
+              checks.helium = pkgs.testers.runNixOSTest {
+                name = "helium";
+                node.pkgsReadOnly = false;
+                node.specialArgs = { inherit inputs self; };
+                nodes.machine.imports = rootConfig.flake.modules.nixos;
+                testScript =
+                  ''
+                    machine.start()
+                    machine.wait_for_unit("default.target")
+                    ${
+                      let
+                        cfg = rootConfig.flake.nixosConfigurations.helium.config;
+                      in
+                      lib.pipe cfg.helion.remote.access [
+                        (lib.mapAttrsToList(u: enabled: ''machine.${
+                          if enabled then "succeed"
+                          else "fail"
+                        }("id -nG ${u} | grep 'wheel'")''))
+                        (lib.concatStringsSep "\n")
+                      ]
+                    }
+                    machine.succeed("id -nG lunarix | grep -qw 'wheel'")
+                  '';
               };
             };
           };
