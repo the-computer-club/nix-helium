@@ -9,7 +9,7 @@
     };
 
     remote.access = {
-      skettisouls = false;
+      skettisouls = true;
       lunarix = true;
     };
   };
