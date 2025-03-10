@@ -17,13 +17,13 @@
 
   outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; }
-      ({ config, ... }:
+      (args@{ config, lib, ... }:
         let
-          inherit (nixpkgs) lib;
+          inherit (nixpkgs.lib) nixosSystem;
           rootConfig = config;
-          fileAttrs = lib.filterAttrs (_: t: t == "regular") (builtins.readDir ./src);
-          fileList = with builtins; filter (lib.hasSuffix "nix") (attrNames fileAttrs);
-          src = map (file: ./src/${file}) fileList;
+          this = (import ./lib.nix args);
+          src = map (file: ./src/${file})
+            (this.walkNixFiles ./src);
         in
         {
           imports = with inputs; [
@@ -35,6 +35,16 @@
           config = {
             systems = [ "x86_64-linux" ];
             flake = {
+              ##################
+              # intended for
+              # note: `nix repl`
+              # lib = lib.fix (
+              #   lib.extends
+              #     (f: p: this)
+              #     (f: lib)
+              # );
+              ##################
+
               modules.nixos = with inputs; [
                 disko.nixosModules.disko
                 lynx.nixosModules.flake-guard-host
@@ -44,11 +54,12 @@
                 { environment.etc.nixpkgs.source = nixpkgs; }
               ] ++ src;
 
-              nixosConfigurations.helium = lib.nixosSystem {
-                specialArgs = { inherit inputs self; };
+              nixosConfigurations.helium = this.buildBox {
+                specialArgs = { inherit self inputs; };
                 modules = config.flake.modules.nixos;
               };
             };
+
             perSystem = { config, pkgs, ... }: {
               pre-commit.check.enable = true;
 
@@ -63,7 +74,7 @@
                   config.pre-commit.installationScript
                   ''
                     sops-recrypt() {
-                      sops decrypt $1 | sops encrypt --filename-override $1 /dev/stdin
+                      sops decrypt $1 | sops encrypt --filename-override ''${2:-$1} /dev/stdin
                     }
                   ''
                 ];
@@ -79,7 +90,11 @@
               checks.helium = pkgs.testers.runNixOSTest {
                 name = "helium";
                 node.pkgsReadOnly = false;
-                node.specialArgs = { inherit inputs self; };
+                node.specialArgs = {
+                  inherit this;
+                  inherit self inputs;
+                };
+
                 nodes.machine.imports = rootConfig.flake.modules.nixos;
                 testScript =
                   ''

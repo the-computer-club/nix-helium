@@ -158,11 +158,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1738765162,
-        "narHash": "sha256-3Z40qHaFScWUCVQrGc4Y+RdoPsh1R/wIh+AN4cTXP0I=",
+        "lastModified": 1740485968,
+        "narHash": "sha256-WK+PZHbfDjLyveXAxpnrfagiFgZWaTJglewBWniTn2Y=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "ff3568858c54bd306e9e1f2886f0f781df307dff",
+        "rev": "19c1140419c4f1cdf88ad4c1cfb6605597628940",
         "type": "github"
       },
       "original": {
@@ -224,11 +224,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1738453229,
-        "narHash": "sha256-7H9XgNiGLKN1G1CgRh0vUL4AheZSYzPm+zmZ7vxbJdo=",
+        "lastModified": 1741352980,
+        "narHash": "sha256-+u2UunDA4Cl5Fci3m7S643HzKmIDAe+fiXrLqYsR2fs=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "32ea77a06711b758da0ad9bd6a844c5740a87abd",
+        "rev": "f4330d22f1c5d2ba72d3d22df5597d123fdb60a9",
         "type": "github"
       },
       "original": {
@@ -262,11 +262,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1737465171,
-        "narHash": "sha256-R10v2hoJRLq8jcL4syVFag7nIGE7m13qO48wRIukWNg=",
+        "lastModified": 1741379162,
+        "narHash": "sha256-srpAbmJapkaqGRE3ytf3bj4XshspVR5964OX5LfjDWc=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "9364dc02281ce2d37a1f55b6e51f7c0f65a75f17",
+        "rev": "b5a62751225b2f62ff3147d0a334055ebadcd5cc",
         "type": "github"
       },
       "original": {
@@ -784,14 +784,17 @@
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1738452942,
-        "narHash": "sha256-vJzFZGaCpnmo7I6i416HaBLpC+hvcURh/BQwROcGIp8=",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
+        "lastModified": 1740877520,
+        "narHash": "sha256-oiwv/ZK/2FhGxrCkQkB83i7GnWXPPLzoqFHpDD3uYpk=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "147dee35aab2193b174e4c0868bd80ead5ce755c",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
       }
     },
     "nixpkgs-lib_2": {
@@ -918,6 +921,37 @@
         "type": "github"
       }
     },
+    "polyphasia": {
+      "inputs": {
+        "flake-parts": [
+          "terra",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "terra",
+          "nixpkgs-unstable"
+        ],
+        "rust-overlay": "rust-overlay_2",
+        "systems": "systems_7",
+        "wrapper-manager": [
+          "terra",
+          "wrapper-manager"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740206427,
+        "narHash": "sha256-7dt6qVo3zjau2Jx5MrjvAk0BKeUrzaF7lOrcWg1pwaM=",
+        "ref": "refs/heads/master",
+        "rev": "ffcaa999c76fb93d29cb2198154fe74964134b00",
+        "revCount": 7,
+        "type": "git",
+        "url": "https://codeberg.org/skettisouls/polyphasia"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/skettisouls/polyphasia"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat_3",
@@ -965,6 +999,28 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "rev": "17d3930e54a50df2afe52a2d1d1f506edb262bbe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
+      "inputs": {
+        "nixpkgs": [
+          "terra",
+          "polyphasia",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1741573199,
+        "narHash": "sha256-A2sln1GdCf+uZ8yrERSCZUCqZ3JUlOv1WE2VFqqfaLQ=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "c777dc8a1e35407b0e80ec89817fe69970f4e81a",
         "type": "github"
       },
       "original": {
@@ -1081,6 +1137,21 @@
         "type": "github"
       }
     },
+    "systems_7": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "terra": {
       "inputs": {
         "asluni": "asluni_2",
@@ -1098,14 +1169,15 @@
         "nixcord": "nixcord",
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "polyphasia": "polyphasia",
         "wrapper-manager": "wrapper-manager_2"
       },
       "locked": {
-        "lastModified": 1738976065,
-        "narHash": "sha256-fVo4HaTg+fBOb1+D7tF9cNIdW5VX9ADIwtPr6XNRmew=",
+        "lastModified": 1741428190,
+        "narHash": "sha256-l3ad9Ne9OW89Xuz2d5NLez2E49hS5PKh5RUlDrBLeco=",
         "owner": "skettisouls",
         "repo": "nixos",
-        "rev": "ad97f1a34696466582d0cc79ab64ee8a39b89294",
+        "rev": "83a6b8d9051cd2bcea7535877861d3d1b621e929",
         "type": "github"
       },
       "original": {

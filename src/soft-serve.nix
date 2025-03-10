@@ -1,15 +1,19 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   inherit (lib)
     attrValues
     flatten
+    optionals
     mapAttrs
+    mapAttrsToList
     ;
+
+  inherit (lib.helion)
+    maybeKey;
 
   cfg = config.helion.soft-serve;
 in
@@ -18,8 +22,15 @@ in
     enable = lib.mkEnableOption "";
     admins = lib.mkOption {
       type = with lib.types; listOf str;
-      default = flatten (attrValues (mapAttrs (_: ucfg: ucfg.sshKeys) config.helion.users));
+      default =
+        flatten
+          (mapAttrsToList (user: enabled:
+            optionals enabled
+              ((maybeKey "ssh-rsa" user) ++ (maybeKey "ssh-ed25519")))
+          )
+          config.helion.remote.access;
     };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 9999;

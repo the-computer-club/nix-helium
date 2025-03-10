@@ -1,22 +1,10 @@
-{ config, lib, ... }:
-with lib;
+{ config, lib, this, ... }:
 let
-  keyOption = args: mkOption ({
-    type = with types; attrsOf str;
-    default = { };
-  } // args);
-
-  maybeKey = k: user:
-    lib.optional
-      (cfg.keys ? "${k}"
-        && cfg.keys.${k} ? "${user}"
-        && cfg.keys.${k}.${user} != null
-        && cfg.keys.${k}.${user} != ""
-      )
-      cfg.keys.${k}.${user};
-
+  inherit (this) keyOption;
   cfg = config.helion;
+  maybeKey = this.maybeKey cfg;
 in
+with lib;
 {
   options.helion = {
     keys = mkOption {
@@ -52,8 +40,8 @@ in
         isNormalUser = true;
         openssh.authorizedKeys.keys =
           lib.optionals bool
-            (maybeKey "ssh-ed25519" name)
-          ++ (maybeKey "ssh-rsa" name);
+            ((maybeKey "ssh-ed25519" name)
+              ++ (maybeKey "ssh-rsa" name));
       })
       cfg.remote.access;
 
