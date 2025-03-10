@@ -26,7 +26,6 @@
     firewall.allowedTCPPorts = [ 22 ];
   };
 
-
   programs.git = {
     enable = true;
     config = {
@@ -56,6 +55,16 @@
     extraOptions = ''
       trusted-users = root skettisouls lunarix
     '';
+  };
+
+  # nixos-rebuild build-vm should include host /etc/ssh
+  # (useful for secrets + debugging)
+  virtualisation.vmVariant.virtualisation.sharedDirectories = {
+    secrets = {
+      source = "/etc/ssh";
+      target = "/etc/ssh";
+      securityModel = "passthrough";
+    };
   };
 
   time.timeZone = "America/Chicago";
