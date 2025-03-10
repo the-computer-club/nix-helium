@@ -1,23 +1,26 @@
-{ config, ... }:
+{ config, lib, ... }:
+let
+  inherit (lib) mkDefault;
+in
 {
   sops = {
     defaultSopsFile = "${../secrets/default.${config.sops.defaultSopsFormat}}";
     defaultSopsFormat = "json";
-    age.sshKeyPaths = [
-      "/etc/ssh/ssh_host_ed25519_key"
-    ];
     secrets.asluni = { };
   };
 
-  wireguard.enable = true;
-  wireguard.networks.asluni = {
-    secretsLookup = "asluni";
-    autoConfig = {
-      openFirewall = true;
-      "networking.wireguard" = {
-        interface.enable = true;
-        peers.mesh.enable = true;
-      };
+  wireguard.defaults.autoConfig = {
+    openFirewall = mkDefault true;
+
+    "networking.wireguard" = {
+      interface.enable = mkDefault true;
+      peers.mesh.enable = mkDefault true;
+    };
+
+    "networking.hosts" = {
+      FQDNs.enable = mkDefault true;
+      names.enable = mkDefault true;
     };
   };
+
 }

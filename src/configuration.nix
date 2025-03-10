@@ -1,6 +1,14 @@
 { inputs, config, pkgs, lib, ... }:
+let
+  inherit (lib) mkDefault;
+in
+
 {
-  imports = [ ./users ];
+  imports = [
+    ./users
+    ./wireguard.nix
+  ];
+  wireguard.enable = true;
 
   helion = {
     keys.ssh-ed25519 = {
