@@ -41,7 +41,6 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    # This fix was recently added to upstream but is not in repo yet
     systemd.services.soft-serve.restartTriggers = [
       ((pkgs.formats.yaml { }).generate "config.yaml" config.services.soft-serve.settings)
     ];
@@ -49,7 +48,7 @@ in
     services.soft-serve = {
       enable = true;
       settings = {
-        name = "luni repos";
+        name = "computer club repos";
         log_format = "text";
         ssh = {
           listen_addr = ":${builtins.toString cfg.port}";
