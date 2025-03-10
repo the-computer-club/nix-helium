@@ -1,7 +1,7 @@
 { config, ... }:
 {
   sops = {
-    defaultSopsFile = "${../secrets.${config.sops.defaultSopsFormat}}";
+    defaultSopsFile = "${../secrets/default.${config.sops.defaultSopsFormat}}";
     defaultSopsFormat = "json";
     age.sshKeyPaths = [
       "/etc/ssh/ssh_host_ed25519_key"
