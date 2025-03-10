@@ -14,6 +14,7 @@ in
   config = lib.mkIf config.helion.remote.access.skettisouls {
     users.users.skettisouls = {
       shell = wpkgs.nushell;
+      extraGroups = [ "networkmanager" "wheel" ];
       packages = [
         wpkgs.lazygit
         wpkgs.nushell
