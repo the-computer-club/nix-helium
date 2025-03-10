@@ -9,7 +9,7 @@
     };
 
     remote.access = {
-      skettisouls = true;
+      skettisouls = false;
       lunarix = true;
     };
   };
@@ -65,10 +65,10 @@
     users.mutableUsers = true;
     users.users = lib.mapAttrs
       (user: enabled:
-        (lib.traceVal (lib.optionalAttrs enabled {
+        (lib.optionalAttrs enabled {
           isNormalUser = true;
           initialPassword = "nixos";
-        }))
+        })
       )
       config.helion.remote.access;
 
