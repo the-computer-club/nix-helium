@@ -2,12 +2,8 @@
 let
   inherit (lib) mkDefault;
 in
-
 {
-  imports = [
-    ./users
-    ./wireguard.nix
-  ];
+  imports = [ ./users ];
   wireguard.enable = true;
 
   helion = {
