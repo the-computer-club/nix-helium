@@ -19,7 +19,7 @@ in
         wpkgs.lazygit
         wpkgs.nushell
         spkgs.rebuild
-        # spkgs.neovim ! broken
+        spkgs.neovim # ! broken
         pkgs.btop
         pkgs.neofetch
       ];

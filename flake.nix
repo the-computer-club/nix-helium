@@ -12,7 +12,7 @@
     };
 
     # Sketti config, for user packages
-    terra.url = "github:skettisouls/nixos";
+    terra.url = "github:skettisouls/nixos/ad97f1a34696466582d0cc79ab64ee8a39b89294";
   };
 
   outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
