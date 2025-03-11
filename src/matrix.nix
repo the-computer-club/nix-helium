@@ -17,6 +17,7 @@ in
       matrixRegistration = lib.mkOption { type = lib.types.path; };
     };
   };
+
   config = lib.mkIf cfg.enable {
     services.postgresql = {
       enable = true;

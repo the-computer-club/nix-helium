@@ -1,6 +1,7 @@
 { lib
 , pkgs
 , config
+, this
 , ...
 }:
 let
@@ -12,9 +13,7 @@ let
     mapAttrsToList
     ;
 
-  inherit (lib.helion)
-    maybeKey;
-
+  maybeKey = this.maybeKey config.helion;
   cfg = config.helion.soft-serve;
 in
 {
@@ -59,6 +58,5 @@ in
         initial_admin_keys = cfg.admins;
       };
     };
-
   };
 }
