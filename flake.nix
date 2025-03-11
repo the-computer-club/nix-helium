@@ -91,8 +91,7 @@
                 name = "helium";
                 node.pkgsReadOnly = false;
                 node.specialArgs = {
-                  inherit this;
-                  inherit self inputs;
+                  inherit self inputs this;
                 };
 
                 nodes.machine.imports = rootConfig.flake.modules.nixos;
