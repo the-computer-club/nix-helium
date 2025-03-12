@@ -50,6 +50,11 @@
                 lynx.nixosModules.flake-guard-host
                 asluni.nixosModules.asluni
                 sops.nixosModules.sops
+
+                /*
+                  symlink source code into /etc
+                  for easy access
+                */
                 { environment.etc.nixos.source = self; }
                 { environment.etc.nixpkgs.source = nixpkgs; }
               ] ++ src;
@@ -89,6 +94,8 @@
 
               checks.helium = pkgs.testers.runNixOSTest {
                 name = "helium";
+
+                /* allow unfree */
                 node.pkgsReadOnly = false;
                 node.specialArgs = {
                   inherit self inputs this;
@@ -112,6 +119,8 @@
                       ]
                     }
                     machine.succeed("id -nG lunarix | grep -qw 'wheel'")
+
+                    machine.wait_for_unit("sshd.service")
                   '';
               };
             };
