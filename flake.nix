@@ -38,11 +38,11 @@
               ##################
               # intended for
               # note: `nix repl`
-              # lib = lib.fix (
-              #   lib.extends
-              #     (f: p: this)
-              #     (f: lib)
-              # );
+              lib = lib.fix (
+                lib.extends
+                  (f: p: this)
+                  (f: lib)
+              );
               ##################
 
               modules.nixos = with inputs; [
@@ -50,7 +50,7 @@
                 lynx.nixosModules.flake-guard-host
                 asluni.nixosModules.asluni
                 sops.nixosModules.sops
-                # { environment.etc.nixos.source = self; }
+                { environment.etc.nixos.source = self; }
                 { environment.etc.nixpkgs.source = nixpkgs; }
               ] ++ src;
 
