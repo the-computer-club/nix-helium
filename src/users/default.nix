@@ -4,5 +4,6 @@
     [
       ./skettisouls.nix
       ./lunarix.nix
+      ./sky.nix
     ];
 }
