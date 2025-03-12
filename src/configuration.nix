@@ -8,6 +8,7 @@
 
   remote.access = {
     argon = true;
+    sky = true;
     lunarix = true;
   };
 
