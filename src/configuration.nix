@@ -10,15 +10,13 @@ in
     keys.ssh-ed25519 = {
       skettisouls = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU3q+/0jJLkAtvCk3hJ+QAXCvza7SZ9a0V6FZq6IJne";
       lunarix = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcon6Pn5nLNXEuLH22ooNR97ve290d2tMNjpM8cTm2r";
-
     };
-
     remote.access = {
-      skettisouls = true;
+      argon = true;
+      sky = true;
       lunarix = true;
     };
   };
-
   # MBR
   boot.loader.grub = {
     efiSupport = true;
