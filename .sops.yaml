@@ -1,0 +1,15 @@
+keys:
+  - &helium age13xesxxmfrvkl6wyrl5qq3py3ku7htu70z9ev0fvchft8f9gexuxsnut4uj
+  - &lunarix_xps age1tww97esm3h0cc09r3np9p4274722pqrcu60whl7wvdf86mn6uchsk3lydx
+  - &lunarix_flag age14u4gs3w4mmklxrnrmmzykgx4pamx54uqwvetlcd4mtw6vtgpduqswfj0nd
+  - &jeff age1sty5jqg89vnve7g7w5t86mx8vsa7zag9c8dapx2fhjn4vtu9t9hq75q4w7
+  - &sketti age1e50cut03e4kk093nfc5fkcg28zd7ypahy8sc0g43kjfrgvq3uf2s2vgy6l
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini|keytab)$
+    key_groups:
+    - age:
+      - *lunarix_xps
+      - *lunarix_flag
+      - *jeff
+      - *sketti
+      - *helium

@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, config, pkgs, lib, ... }:
 let
   system = "x86_64-linux";
   inherit (inputs.terra)
@@ -11,17 +11,15 @@ let
   spkgs = packages.${system} // { neovim = nvim-pkg; };
 in
 {
-  helion = rec {
-    keys.argon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILU3q+/0jJLkAtvCk3hJ+QAXCvza7SZ9a0V6FZq6IJne";
-
-    users.skettisouls = {
-      sshKeys = with keys; [ argon ];
+  config = lib.mkIf config.helion.remote.access.skettisouls {
+    users.users.skettisouls = {
       shell = wpkgs.nushell;
+      extraGroups = [ "networkmanager" "wheel" ];
       packages = [
         wpkgs.lazygit
         wpkgs.nushell
         spkgs.rebuild
-        spkgs.neovim
+        spkgs.neovim # ! broken
         pkgs.btop
         pkgs.neofetch
       ];

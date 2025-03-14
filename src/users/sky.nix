@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 {
-  config = lib.mkIf config.helion.remote.access.lunarix {
+  config = lib.mkIf config.helion.remote.access.sky {
     programs.fish.enable = true;
-    users.users.lunarix = {
+    users.users.sky = {
       shell = pkgs.fish;
       isNormalUser = true;
       initialPassword = "nixos";
