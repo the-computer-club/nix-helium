@@ -1,4 +1,9 @@
-{ inputs, config, pkgs, lib, ... }:
+{ inputs
+, config
+, pkgs
+, lib
+, ...
+}:
 let
   inherit (lib) mkDefault;
 in
@@ -19,6 +24,18 @@ in
       lunarix = true;
     };
   };
+
+  services.comin = {
+    enable = true;
+    remotes = [
+      {
+        name = "origin";
+        url = "https://github.com/the-computer-club/nix-helium.git";
+        branches.main.name = "master";
+      }
+    ];
+  };
+
   # MBR
   boot.loader.grub = {
     efiSupport = true;
@@ -56,7 +73,10 @@ in
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     package = pkgs.nix;
     registry = lib.mapAttrs (_: flake: { inherit flake; }) inputs;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
 
     extraOptions = ''
       trusted-users = root skettisouls lunarix
@@ -69,11 +89,14 @@ in
   virtualisation.vmVariant = {
     users.mutableUsers = true;
     users.users = lib.mapAttrs
-      (user: enabled:
-        (lib.traceVal (lib.optionalAttrs enabled {
-          isNormalUser = true;
-          initialPassword = "nixos";
-        }))
+      (
+        user: enabled:
+          (lib.traceVal (
+            lib.optionalAttrs enabled {
+              isNormalUser = true;
+              initialPassword = "nixos";
+            }
+          ))
       )
       config.helion.remote.access;
 
