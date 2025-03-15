@@ -10,62 +10,70 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Sketti config, for user packages
     terra.url = "github:skettisouls/nixos/ad97f1a34696466582d0cc79ab64ee8a39b89294";
   };
 
-  outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; }
-      (args@{ config, lib, ... }:
-        let
-          inherit (nixpkgs.lib) nixosSystem;
-          rootConfig = config;
-          this = (import ./lib.nix args);
-          src = map (file: ./src/${file})
-            (this.walkNixFiles ./src);
-        in
-        {
-          imports = with inputs; [
-            git-hooks-nix.flakeModule
-            lynx.flakeModules.flake-guard
-            ./check-users.nix
-          ];
+  outputs =
+    inputs@{ self
+    , nixpkgs
+    , flake-parts
+    , ...
+    }:
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      args@{ config, lib, ... }:
+      let
+        inherit (nixpkgs.lib) nixosSystem;
+        rootConfig = config;
+        this = (import ./lib.nix args);
+        src = map (file: ./src/${file}) (this.walkNixFiles ./src);
+      in
+      {
+        imports = with inputs; [
+          git-hooks-nix.flakeModule
+          lynx.flakeModules.flake-guard
+          ./check-users.nix
+        ];
 
-          config = {
-            systems = [ "x86_64-linux" ];
-            flake = {
-              ##################
-              # intended for
-              # note: `nix repl`
-              lib = lib.fix (
-                lib.extends
-                  (f: p: this)
-                  (f: lib)
-              );
-              ##################
+        config = {
+          systems = [ "x86_64-linux" ];
+          flake = {
+            ##################
+            # intended for
+            # note: `nix repl`
+            lib = lib.fix (lib.extends (f: p: this) (f: lib));
+            ##################
 
-              modules.nixos = with inputs; [
+            modules.nixos =
+              with inputs;
+              [
                 disko.nixosModules.disko
                 lynx.nixosModules.flake-guard-host
                 asluni.nixosModules.asluni
                 sops.nixosModules.sops
-
+                comin.nixosModules.comin
                 /*
                   symlink source code into /etc
                   for easy access
                 */
                 { environment.etc.nixos.source = self; }
                 { environment.etc.nixpkgs.source = nixpkgs; }
-              ] ++ src;
+              ]
+              ++ src;
 
-              nixosConfigurations.helium = this.buildBox {
-                specialArgs = { inherit self inputs; };
-                modules = config.flake.modules.nixos;
-              };
+            nixosConfigurations.helium = this.buildBox {
+              specialArgs = { inherit self inputs; };
+              modules = config.flake.modules.nixos;
             };
+          };
 
-            perSystem = { config, pkgs, ... }: {
+          perSystem =
+            { config, pkgs, ... }:
+            {
               pre-commit.check.enable = true;
 
               pre-commit.settings.hooks = {
@@ -95,35 +103,34 @@
               checks.helium = pkgs.testers.runNixOSTest {
                 name = "helium";
 
-                /* allow unfree */
+                # allow unfree
                 node.pkgsReadOnly = false;
                 node.specialArgs = {
                   inherit self inputs this;
                 };
 
                 nodes.machine.imports = rootConfig.flake.modules.nixos;
-                testScript =
-                  ''
-                    machine.start()
-                    machine.wait_for_unit("default.target")
-                    ${
-                      let
-                        cfg = rootConfig.flake.nixosConfigurations.helium.config;
-                      in
-                      lib.pipe cfg.helion.remote.access [
-                        (lib.mapAttrsToList(u: enabled: ''machine.${
-                          if enabled then "succeed"
-                          else "fail"
-                        }("id -nG ${u} | grep 'wheel'")''))
-                        (lib.concatStringsSep "\n")
-                      ]
-                    }
-                    machine.succeed("id -nG lunarix | grep -qw 'wheel'")
+                testScript = ''
+                  machine.start()
+                  machine.wait_for_unit("default.target")
+                  ${
+                    let
+                      cfg = rootConfig.flake.nixosConfigurations.helium.config;
+                    in
+                    lib.pipe cfg.helion.remote.access [
+                      (lib.mapAttrsToList (
+                        u: enabled: ''machine.${if enabled then "succeed" else "fail"}("id -nG ${u} | grep 'wheel'")''
+                      ))
+                      (lib.concatStringsSep "\n")
+                    ]
+                  }
+                  machine.succeed("id -nG lunarix | grep -qw 'wheel'")
 
-                    machine.wait_for_unit("sshd.service")
-                  '';
+                  machine.wait_for_unit("sshd.service")
+                '';
               };
             };
-          };
-        });
+        };
+      }
+    );
 }
