@@ -19,6 +19,11 @@ in
       lunarix = true;
     };
   };
+
+  environment.systemPackages = with pkgs [
+    file
+  ];
+
   # MBR
   boot.loader.grub = {
     efiSupport = true;
