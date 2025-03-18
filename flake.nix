@@ -56,8 +56,13 @@
                   symlink source code into /etc
                   for easy access
                 */
-                { environment.etc.nixos.source = self; }
-                { environment.etc.nixpkgs.source = nixpkgs; }
+                {
+                  environment.etc = {
+                    source-revision.text = self.rev or self.dirtyRev;
+                    nixos.source = self;
+                    nixpkgs.source = nixpkgs;
+                  };
+                }
               ] ++ src;
 
               nixosConfigurations.helium = this.buildBox {
@@ -120,7 +125,6 @@
                       ]
                     }
                     machine.succeed("id -nG lunarix | grep -qw 'wheel'")
-
                     machine.wait_for_unit("sshd.service")
                   '';
               };
