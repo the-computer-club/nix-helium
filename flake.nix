@@ -30,6 +30,7 @@
             git-hooks-nix.flakeModule
             lynx.flakeModules.flake-guard
             ./check-users.nix
+            ./rev.nix
           ];
 
           config = {
