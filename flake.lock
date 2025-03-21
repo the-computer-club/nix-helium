@@ -112,6 +112,26 @@
         "type": "github"
       }
     },
+    "comin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1741725246,
+        "narHash": "sha256-gmSml3y7M8MAeigwy9qsfOjR7afPivAR3MbPPywdDuk=",
+        "owner": "nlewo",
+        "repo": "comin",
+        "rev": "42de4a8e511b2d64849a0243b35000a3d96b5f79",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nlewo",
+        "repo": "comin",
+        "type": "github"
+      }
+    },
     "curseforge-server-downloader-src": {
       "flake": false,
       "locked": {
@@ -949,6 +969,7 @@
     "root": {
       "inputs": {
         "asluni": "asluni",
+        "comin": "comin",
         "disko": "disko",
         "flake-parts": "flake-parts",
         "git-hooks-nix": "git-hooks-nix",

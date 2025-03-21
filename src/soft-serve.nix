@@ -21,13 +21,11 @@ in
     enable = lib.mkEnableOption "";
     admins = lib.mkOption {
       type = with lib.types; listOf str;
-      default =
-        flatten
-          (mapAttrsToList (user: enabled:
-            optionals enabled
-              ((maybeKey "ssh-rsa" user) ++ (maybeKey "ssh-ed25519")))
-          )
-          config.helion.remote.access;
+      default = with config.helion.keys.ssh-ed25519; [
+        sky
+        skettisouls
+        lunarix
+      ];
     };
 
     port = lib.mkOption {
@@ -38,12 +36,16 @@ in
       default = "git.helium.luni";
       type = lib.types.str;
     };
+    openFirewall = lib.mkEnableOption "Enables required firewall ports";
   };
   config = lib.mkIf cfg.enable {
     systemd.services.soft-serve.restartTriggers = [
       ((pkgs.formats.yaml { }).generate "config.yaml" config.services.soft-serve.settings)
     ];
-
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [
+      cfg.port
+      23235
+    ];
     services.soft-serve = {
       enable = true;
       settings = {
