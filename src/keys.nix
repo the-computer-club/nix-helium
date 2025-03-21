@@ -11,11 +11,14 @@ with lib;
       default = { };
       type = types.submoduleWith {
         modules = [
-          { freeformType = types.attrsOf (types.attrsOf types.str); }
+          { freeformType = types.attrsOf (types.attrsOf types.string); }
           {
-            ssh-ed25519 = keyOption { };
-            ssh-rsa = keyOption { };
-            store = keyOption { };
+            options.ssh-ed25519 = mkOption {
+              type = with types; attrsOf str;
+              default = { };
+            };
+            options.ssh-rsa = keyOption { };
+            options.store = keyOption { };
           }
         ];
       };
